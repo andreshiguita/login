@@ -98,9 +98,11 @@ angular.module('starter.services', [])
 
 .service('LoginService', function($http, $q) {
     return {
-        loginUser: function(name, pw) {
+        loginUser: function(dataObj) {
             var deferred = $q.defer();
             var promise = deferred.promise;
+            console.log(dataObj.username)
+
 
             $http.post('http://echo.jsontest.com/conditions/frightful', {user:"user", pdw:"pasw"}).then(function(resp) {
               //$scope.conditions = resp.data.conditions;
