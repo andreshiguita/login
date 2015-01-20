@@ -101,7 +101,10 @@ angular.module('starter.services', [])
         loginUser: function(dataObj) {
             var deferred = $q.defer();
             var promise = deferred.promise;
-            console.log(dataObj.username)
+
+            //Testing convertion
+            var test = JSON.stringify(dataObj);
+            console.log("test: " + test);
 
 
             $http.post('http://echo.jsontest.com/conditions/frightful', {user:"user", pdw:"pasw"}).then(function(resp) {
