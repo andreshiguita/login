@@ -94,4 +94,41 @@ angular.module('starter.services', [])
       return friends[friendId];
     }
   }
+})
+
+.service('LoginService', function($http, $q) {
+    return {
+        loginUser: function(name, pw) {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+
+            $http.post('http://echo.jsontest.com/conditions/frightful', {user:"user", pdw:"pasw"}).then(function(resp) {
+              //$scope.conditions = resp.data.conditions;
+              deferred.resolve('Welcome ' + name + '!');
+            }, function(err) {
+              console.error('ERR', err);
+              deferred.reject('Wrong credentials.');
+              // err.status will contain the status code
+            })
+
+            /*
+            if (name == 'user' && pw == 'secret') {
+                deferred.resolve('Welcome ' + name + '!');
+            } else {
+                deferred.reject('Wrong credentials.');
+            }
+            */
+
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+            
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+    }
 });
