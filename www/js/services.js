@@ -103,11 +103,13 @@ angular.module('starter.services', [])
             var promise = deferred.promise;
 
             //Testing convertion
-            var test = JSON.stringify(dataObj);
-            console.log("test: " + test);
+            var srtDataObject = JSON.stringify(dataObj);
+            console.log("vtw: " + srtDataObject);
 
 
-            $http.post('http://echo.jsontest.com/conditions/frightful', {user:"user", pdw:"pasw"}).then(function(resp) {
+            //$http.post('http://echo.jsontest.com/conditions/frightful', ).then(function(resp) {
+            $http.post('http://echo.jsontest.com/conditions/frightful', {vtw:srtDataObject}).then(function(resp) {
+            
               //$scope.conditions = resp.data.conditions;
               deferred.resolve('Welcome ' + name + '!');
             }, function(err) {
