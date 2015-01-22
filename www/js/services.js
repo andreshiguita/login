@@ -104,13 +104,27 @@ angular.module('starter.services', [])
 
             //Testing convertion
             var srtDataObject = JSON.stringify(dataObj);
+            //var srtDataObject = "3089381924b12a45a19c37c3f53ec58bc9737798f5bc1fc35e7cea04f57c8e7093b413a6e09a2ee1f0cbd4dde415cf4a";
             console.log("vtw: " + srtDataObject);
 
+            //
+            var claveCifrado = "m0b1lt3ch2011pwdm0b1lt3ch2011pwd";
+            var textoCifradoHexa = byteArrayToHex(rijndaelEncrypt(srtDataObject, claveCifrado, "ECB"));
+
+            console.log("textoCifradoHexa", textoCifradoHexa);
+
+            $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
             //$http.post('http://echo.jsontest.com/conditions/frightful', ).then(function(resp) {
-            $http.post('http://echo.jsontest.com/conditions/frightful', {vtw:srtDataObject}).then(function(resp) {
+            $http.post('http://192.168.0.21:9380/ventamovil/ventaMovil', {"vtw":textoCifradoHexa,"usuario":"andres"})
+
+            .then(function(resp) {
+            //$http.post('http://echo.jsontest.com/conditions/frightful', "vtw="+srtDataObject).then(function(resp) {
             
               //$scope.conditions = resp.data.conditions;
+              console.log("respuesta", resp.data)
+              console.log("respuesta", resp.data.permisos)
+              console.log("respuesta", resp.data.usuarios)
               deferred.resolve('Welcome ' + name + '!');
             }, function(err) {
               console.error('ERR', err);
