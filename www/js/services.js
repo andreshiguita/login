@@ -108,23 +108,39 @@ angular.module('starter.services', [])
             console.log("vtw: " + srtDataObject);
 
             //
-            var claveCifrado = "m0b1lt3ch2011pwdm0b1lt3ch2011pwd";
+            var claveCifrado = (new Date()).format("00hh00dd00mmyyyy00HH00dd00mmyyyy");
             var textoCifradoHexa = byteArrayToHex(rijndaelEncrypt(srtDataObject, claveCifrado, "ECB"));
 
+            console.log("claveCifrado", claveCifrado);
             console.log("textoCifradoHexa", textoCifradoHexa);
 
             $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
             //$http.post('http://echo.jsontest.com/conditions/frightful', ).then(function(resp) {
-            $http.post('http://192.168.0.21:9380/ventamovil/ventaMovil', {"vtw":textoCifradoHexa,"usuario":"andres"})
+            $http.post('http://192.168.10.11:9380/ventamovil/ventaMovil', {"vtw":textoCifradoHexa,"usuario":"andres"})
 
             .then(function(resp) {
             //$http.post('http://echo.jsontest.com/conditions/frightful', "vtw="+srtDataObject).then(function(resp) {
             
               //$scope.conditions = resp.data.conditions;
-              console.log("respuesta", resp.data)
-              console.log("respuesta", resp.data.permisos)
-              console.log("respuesta", resp.data.usuarios)
+              console.log("respuesta", resp.data.vtw)
+  
+              //Decifra
+              var respuestaCifrada = hex2s(resp.data.vtw);
+              var respuestaPlanaHexa = byteArrayToHex(rijndaelDecrypt(respuestaCifrada, claveCifrado, "ECB"));
+              var respuestaPlana = hex2s(respuestaPlanaHexa).replace(/\0/g, '');
+
+              console.log("respuestaplana", respuestaPlana);
+
+            //To json
+            //var strTests =  '{"loginCorrecto":true,"loginRespuesta":"00","serialSesion":"3U34EYL0QRJ0SY8GZ8GSEYUV","claveSesion":"Ke7CmhCkZpqjR6xGDb1LCKe4i95wMQ4d","saldoAsociado":"250000","nombreUsuario":"Andres Higuita"}';
+            
+            var respuestaPlanaJson = angular.fromJson(respuestaPlana);
+             //var respuestaPlanaJson = JSON.parse(respuestaPlana);
+
+
+             console.log("respuestaPlanaJson", respuestaPlanaJson);
+
               deferred.resolve('Welcome ' + name + '!');
             }, function(err) {
               console.error('ERR', err);
