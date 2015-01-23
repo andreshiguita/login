@@ -133,15 +133,19 @@ angular.module('starter.services', [])
               console.log("respuestaplana", respuestaPlana);
 
             //To json
-            //var strTests =  '{"loginCorrecto":true,"loginRespuesta":"00","serialSesion":"3U34EYL0QRJ0SY8GZ8GSEYUV","claveSesion":"Ke7CmhCkZpqjR6xGDb1LCKe4i95wMQ4d","saldoAsociado":"250000","nombreUsuario":"Andres Higuita"}';
-            
             var respuestaPlanaJson = angular.fromJson(respuestaPlana);
-             //var respuestaPlanaJson = JSON.parse(respuestaPlana);
 
+             console.log("respuestaPlanaJson", respuestaPlanaJson.loginCorrecto);
 
-             console.log("respuestaPlanaJson", respuestaPlanaJson);
-
+             if (respuestaPlanaJson.loginCorrecto)
+             {
               deferred.resolve('Welcome ' + name + '!');
+            } else 
+            {
+              deferred.reject('Wrong credentials.');
+            }
+
+              
             }, function(err) {
               console.error('ERR', err);
               deferred.reject('Wrong credentials.');
